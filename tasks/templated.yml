@@ -18,4 +18,5 @@
   - debug: 
       var: _nxos_bgp_result
       verbosity: 2
+  when: ansible_network_os == 'nxos'
   tags: [always]
