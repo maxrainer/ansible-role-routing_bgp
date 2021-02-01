@@ -1,0 +1,38 @@
+{#
+router bgp 45000
+  log-neighbor-changes
+  neighbor 192.168.1.11 remote-as 11000
+  neighbor 192.168.1.12 remote-as 12000
+  neighbor 192.168.1.13 remote-as 13000
+  vrf vrf1
+    address-family ipv4 unicast
+    neighbor 192.168.1.11 remote-as 11000
+  vrf vrf2
+    address-family ipv4 unicast
+    neighbor 192.168.1.12 remote-as 12000
+  vrf vrf3
+    address-family ipv4 unicast
+    neighbor 192.168.1.13 remote-as 13000
+#}
+router bgp {{ bgp_nxos_global_config.as_number }}
+{% if bgp_nxos_global_config.bestpath is defined %}
+{% if bgp_nxos_global_config.bestpath.as_path is defined and bgp_nxos_global_config.bestpath.as_path.multipath_relax %}
+ bestpath as-path multipath-relax
+{% endif %}
+{% if bgp_nxos_global_config.bestpath.compare_neighborid %}
+ bestpath compare-neighborid
+{% endif %}
+{% endif %}
+{% if bgp_nxos_global_config.log_neighbor_changes %}
+ log-neighbor-changes
+{% endif %}
+{% for neighbor in bgp_nxos_global_config.neighbors %}
+ neighbor {{ neighbor.neighbor_address }} remote-as {{ neighbor.remote_as }}
+{% endfor %}
+{% for vrf in bgp_nxos_global_config.vrfs %}
+ vrf {{ vrf.vrf }}
+{% for neighbor in vrf.neighbors %}
+  neighbor {{ neighbor.neighbor_address }} remote-as {{ neighbor.remote_as }}
+{% endfor %}
+{% endfor %}
+

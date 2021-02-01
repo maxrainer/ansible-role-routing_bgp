@@ -1,0 +1,33 @@
+{#
+router bgp 45000
+ router-id 172.17.1.99
+ bgp log-neighbor-changes
+ neighbor 192.168.1.2 remote-as 40000
+ neighbor 192.168.3.2 remote-as 50000
+ address-family ipv4 unicast
+  neighbor 192.168.1.2 activate
+  network 172.17.1.0 mask 255.255.255.0
+  exit-address-family
+ address-family ipv4 multicast
+  neighbor 192.168.3.2 activate
+  neighbor 192.168.3.2 advertisement-interval 25
+  network 172.16.1.0 mask 255.255.255.0
+  exit-address-family
+ address-family ipv4 vrf vpn1
+  neighbor 192.168.3.2 activate
+  network 172.21.1.0 mask 255.255.255.0
+  exit-address-family
+#}
+router bgp {{ bgp.id }}
+ bgp log-neighbor-changes
+{% for item in bgp.vrfs %}
+ neighbor {{ item.neighbor }} remote-as {{ item.as }}
+{% endfor %}
+{% for item in bgp.vrfs %}
+ address-family ipv4 vrf {{ item.name }}
+  neighbor {{ item.neighbor }} remote-as {{ item.as }}
+  neighbor {{ item.neighbor }} activate
+  network {{ item.network }} mask {{ item.netmask}}
+ exit-address-family
+{% endfor %}
+

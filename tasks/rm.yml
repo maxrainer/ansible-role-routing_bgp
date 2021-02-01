@@ -1,0 +1,23 @@
+---
+# BGP config with resource modules
+
+- name: Cisco NX-OS
+  block:
+    - name: pull currect config
+      cisco.nxos.nxos_facts:
+        gather_subset: min
+        gather_network_resources: 
+          - "bgp_global"
+      register: _nxos_facts
+    - debug: 
+        var: _nxos_facts.ansible_facts.ansible_network_resources | to_nice_yaml
+        verbosity: 2
+    - name: BGP config with resource module
+      cisco.nxos.nxos_bgp_global:
+        config: "{{ bgp_nxos_global_config }}"
+        state: "{{ bgp_rm_state }}"
+      register: _nxos_bgp_config
+    - debug: 
+        var: _nxos_bgp_config
+        verbosity: 2
+  tags: [always]

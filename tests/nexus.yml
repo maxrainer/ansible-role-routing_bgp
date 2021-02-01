@@ -1,0 +1,8 @@
+---
+
+- name: test nexus BGP config
+  hosts: nxos
+  roles: 
+    - ../../routing-bgp
+  connection: local
+  gather_facts: no

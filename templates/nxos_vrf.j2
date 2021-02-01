@@ -1,0 +1,3 @@
+{% for vrf in bgp_nxos_global_config.vrfs %}
+vrf context {{ vrf.vrf }}
+{% endfor %}

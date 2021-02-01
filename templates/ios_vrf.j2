@@ -1,0 +1,4 @@
+{% for vrf in vrfs %}
+ip vrf {{ vrf.name }}
+ rd {{ vrf.rd }}
+{% endfor %}

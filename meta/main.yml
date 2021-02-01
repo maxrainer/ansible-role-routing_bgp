@@ -1,0 +1,23 @@
+dependencies: []
+
+collections: 
+  - cisco.nxos
+  - cisco.ios
+  - ansible.netcommon
+
+galaxy_info:
+  role_name: routing_bgp
+  author: Markus Rainer
+  description: manipulation of BGP config on different platforms in different ways
+  company: Red Hat
+
+  license: MIT
+
+  min_ansible_version: 2.9
+
+  platforms: 
+    - name: GenericUNIX
+      versions:
+        - all
+
+  galaxy_tags: [bgp, cisco, juniper, nexus, ios, junos, demo, lab, networking]

@@ -1,0 +1,21 @@
+---
+
+- name: Cisco NX-OS
+  block:
+  - name: VRF config
+    cisco.nxos.nxos_config:
+      lines: "{{ q('template', 'nxos_vrf.j2') }}"
+    register: _nxos_vrf_result
+  - debug:
+      var: _nxos_vrf_result
+      verbosity: 2
+  - name: BGP config template based
+    cisco.nxos.nxos_config:
+      lines: "{{ q('template', 'nxos_bgp.j2') }}"
+      diff_ignore_lines: '.*exit.*'
+      match: line
+    register: _nxos_bgp_result
+  - debug: 
+      var: _nxos_bgp_result
+      verbosity: 2
+  tags: [always]
