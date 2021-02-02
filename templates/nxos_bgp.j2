@@ -27,12 +27,18 @@ router bgp {{ bgp_nxos_global_config.as_number }}
  log-neighbor-changes
 {% endif %}
 {% for neighbor in bgp_nxos_global_config.neighbors %}
- neighbor {{ neighbor.neighbor_address }} remote-as {{ neighbor.remote_as }}
+ neighbor {{ neighbor.neighbor_address }} 
+  remote-as {{ neighbor.remote_as }} 
+  address-family ipv4 unicast
 {% endfor %}
 {% for vrf in bgp_nxos_global_config.vrfs %}
  vrf {{ vrf.vrf }}
 {% for neighbor in vrf.neighbors %}
-  neighbor {{ neighbor.neighbor_address }} remote-as {{ neighbor.remote_as }}
+  neighbor {{ neighbor.neighbor_address }} 
+   remote-as {{ neighbor.remote_as }}
+   {% if neighbor.local_as is defined -%}
+   local-as {{ neighbor.local_as }}
+   {% endif -%}
+   address-family ipv4 unicast
 {% endfor %}
 {% endfor %}
-

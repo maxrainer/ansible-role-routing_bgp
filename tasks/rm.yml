@@ -3,7 +3,7 @@
 
 - name: Cisco NX-OS
   block:
-    - name: pull currect config
+    - name: pull current config
       cisco.nxos.nxos_facts:
         gather_subset: min
         gather_network_resources: 
@@ -20,5 +20,9 @@
     - debug: 
         var: _nxos_bgp_config
         verbosity: 2
+    - name: BGP neighbor address-family configuration
+      cisco.nxos.nxos_bgp_neighbor_af:
+        "{{ item }}"
+      loop: "{{ bgp_nxos_af_config }}"
   when: ansible_network_os == 'nxos'
   tags: [always]

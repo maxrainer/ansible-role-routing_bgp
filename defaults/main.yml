@@ -25,7 +25,13 @@ bgp_nxos_global_config:
       neighbors:
         - neighbor_address: 192.168.1.12
           remote_as: '12000'
-          
+
+bgp_nxos_af_config:
+- vrf: default
+  asn: '11000'
+  neighbor: 192.168.1.12
+  afi: ipv4
+  safi: unicast         
 
   # as_number: 65563
   # router_id: 192.168.1.1
